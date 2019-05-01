@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+    <input type="text" id="inputnum" value="1" onkeyup="updatepricing()" />
+
+
+    <select id="source" onchange="updatepricing()">
+        <option value="BTC">BTC</option>
+        <option value="ETH">ETH</option>
+        <option value="XRP">XRP</option>
+    </select>
+    <br><br>
+    <input type="text" id="outputnum" value="..." onkeyup="updatepricing()" readonly />
+    <select id="destination" onchange="updatepricing()">
+        <option value="USD">USD</option>
+        <option value="GBP">GBP</option>
+        <option value="EUR">EUR</option>
+    </select>
+
+    <br>
+    <label id="alert"></label>
+
+    <script>
+
+        var BTC = {};
+        var ETH = {};
+        var XRP = {};
+        var percentMargin = 10.00
+        var Margin = percentMargin / 100;
+
+
+        function updatepricing() {
+            $("#alert").text('');
+            var cryptoc = $("#source").val();
+            var fiatc = $("#destination").val();
+
+            var num = Number($("#inputnum").val());
+            if (cryptoc == "BTC") {
+                var converted =BTC[fiatc];
+                var checkvalue =(BTC["USD"]* num).toFixed(0) ;
+                var finalvalue = (converted * num).toFixed(0) ;
+                if (checkvalue< 500 || (converted * num).toFixed(0) > 500000) {
+                    $("#alert").text("min value of transaction:500 USD and max value 500000 USD")
+                }
+                $('#outputnum').val(finalvalue);
+            }
+            if (cryptoc == "ETH") {
+                var converted =ETH[fiatc];
+                var checkvalue =(ETH["USD"]* num).toFixed(0) ;
+                var finalvalue = (converted * num).toFixed(0) ;
+                if (checkvalue< 500 || (converted * num).toFixed(0) > 500000) {
+                    $("#alert").text("min value of transaction:500 USD and max value 500000 USD")
+                }
+                $('#outputnum').val(finalvalue);
+            }
+            if (cryptoc == "XRP") {
+                var converted =XRP[fiatc];
+                var checkvalue =(XRP["USD"]* num).toFixed(0) ;
+                var finalvalue = (converted * num).toFixed(0) ;
+                if (checkvalue< 500 || (converted * num).toFixed(0) > 500000) {
+                    $("#alert").text("min value of transaction:500 USD and max value 500000 USD")
+                }
+                $('#outputnum').val(finalvalue);
+            }
+        }
+
+
+        function getCORS(url, success) {
+            var xhr = new XMLHttpRequest();
+            if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
+            xhr.open('GET', url);
+            xhr.onload = success;
+            xhr.send();
+            return xhr;
+        }
+
+        // example request
+        getCORS('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XRP&tsyms=USD,EUR,GBP&api_key=d23caf418fe6234401ce02163fe294f6e675dc0ac9cd5379c740268332a0969c', function (request) {
+            var response = request.currentTarget.response || request.target.responseText;
+            respo = JSON.parse(response);
+            BTC = respo.BTC;
+            ETH = respo.ETH;
+            XRP = respo.XRP;
+
+            BTC.USD = ((1 + Margin) * BTC.USD).toFixed(0);
+            BTC.EUR = ((1 + Margin) * BTC.EUR).toFixed(0);
+            BTC.GBP = ((1 + Margin) * BTC.GBP).toFixed(0);
+
+            console.log(response);
+
+            ETH.USD = ((1 + Margin) * ETH.USD).toFixed(0);
+            ETH.EUR = ((1 + Margin) * ETH.EUR).toFixed(0);
+            ETH.GBP = ((1 + Margin) * ETH.GBP).toFixed(0);
+
+            console.log(response);
+
+            XRP.USD = ((1 + Margin) * XRP.USD);
+            XRP.EUR = ((1 + Margin) * XRP.EUR);
+            XRP.GBP = ((1 + Margin) * XRP.GBP);
+
+            console.log(response);
+            updatepricing();
+        });
+
+        $(document).ready(function () {
+            
+        });
+    </script>
+
+</body>
+
+</html>
