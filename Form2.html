@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <label id="SourceAmount"></label>
+    <br>
+    <label id="SourceCrypto"></label>
+    <br>
+    <label id="DestinationAmount"></label>
+    <br>
+    <label id="DestinationCrypto"></label>
+    <br>
+
+
+    <div id="BTCForm">This is BTC Form</div>
+    <div id="ETHForm">This is ETH Form</div>
+    <div id="XRPForm">This is XRP Form</div>
+    <script>
+
+
+            var SourceAmount = localStorage.getItem("SourceAmount");
+            var SourceCrypto = localStorage.getItem("SourceCrypto");
+            var DestinationAmount = localStorage.getItem("DestinationAmount");
+            var DestinationCrypto = localStorage.getItem("DestinationCrypto");
+
+            $(document).ready(function () {
+                $("#BTCForm").hide();
+                $("#ETHForm").hide();
+                $("#XRPForm").hide();
+
+                if(SourceCrypto == "BTC"){
+                    $("#BTCForm").show();   
+                }
+                if(SourceCrypto == "ETH"){
+                    $("#ETHForm").show();   
+                }
+                if(SourceCrypto == "XRP"){
+                    $("#XRPForm").show();   
+                }
+            $("#SourceAmount").text('Crypto Amount :'+SourceAmount);
+            $("#SourceCrypto").text('Crypto Currency :'+SourceCrypto);
+            $("#DestinationAmount").text('Fiat amount :'+DestinationAmount);
+            $("#DestinationCrypto").text('Fiat currency :'+DestinationCrypto);
+
+        });
+    </script>
+
+</body>
+
+</html>
