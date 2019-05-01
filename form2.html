@@ -1,1 +1,33 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <label id="SourceAmount"></label>
+    <br>
+    <label id="SourceCrypto"></label>
+    <br>
+    <label id="DestinationAmount"></label>
+    <br>
+    <label id="DestinationCrypto"></label>
+    <br>
+
+    <script>
+
+
+        $(document).ready(function () {
+            $("#SourceAmount").text('Crypto Amount :'+localStorage.getItem("SourceAmount"));
+            $("#SourceCrypto").text('Crypto Currency :'+localStorage.getItem("SourceCrypto"));
+            $("#DestinationAmount").text('Fiat amount :'+localStorage.getItem("DestinationAmount"));
+            $("#DestinationCrypto").text('Fiat currency :'+localStorage.getItem("DestinationCrypto"));
+
+        });
+    </script>
+
+</body>
+
+</html>
