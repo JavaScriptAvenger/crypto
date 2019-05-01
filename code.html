@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    </head>
+    <body>
+
+        <input type="text" id="inputnum" value="1" onkeyup="updatepricing()"/>
+        <select id= "source" onchange="updateSelection(this)">
+            <option value="BTC">BTC</option>
+            <option value="ETH">ETH</option>
+            <option value="XRP">XRP</option>
+        </select>
+        <br>
+        <br>
+        <br>
+        <select id= "btccontainer"></select>
+        <select id= "ethcontainer"></select>
+        <select id= "xrpcontainer"></select>
+
+
+        <br>
+        <label id="alert"></label>
+
+
+        <script>
+
+            var BTC = {};
+            var ETH = {};
+            var XRP = {};
+            var percentMargin =10.00
+            var Margin = percentMargin/100;
+
+
+            function updateSelection(sel){
+                $("#ethcontainer").hide();
+                $("#btccontainer").hide();
+                $("#xrpcontainer").hide();
+                debugger
+                if (sel.value == "BTC") {
+                    $("#btccontainer").show();
+                }
+                if (sel.value == "ETH") {
+                    $("#ethcontainer").show();
+                }
+                if (sel.value == "XRP") {
+                    $("#xrpcontainer").show();
+                }
+                updatepricing()
+            }
+
+            function updatepricing()
+            {
+                $("#ethcontainer").html('');
+                $("#btccontainer").html('');
+                $("#xrpcontainer").html('');
+                $("#alert").text('');
+
+                var num=Number($("#inputnum").val());
+                if ($("#source").val() == "BTC") {
+
+                    if((BTC.USD*num).toFixed(0) <500 || (BTC.USD*num).toFixed(0) >500000){
+                        $("#alert").text("min value of transaction:500 USD and max value 500000 USD")
+                    }
+
+                    $("#btccontainer").append("<option> USD:" + (BTC.USD*num).toFixed(0) + "</option>");
+                    $("#btccontainer").append("<option> EUR:" + (BTC.EUR*num).toFixed(0) + "</option>");
+                    $("#btccontainer").append("<option> GBP:" + (BTC.GBP*num).toFixed(0) + "</option>");
+                }
+                if ($("#source").val() == "ETH") {
+
+
+                    if((ETH.USD*num).toFixed(0) <500 || (ETH.USD*num).toFixed(0) >500000){
+                        $("#alert").text("min value of transaction:500 USD and max value 500000 USD")
+                    }
+                    $("#ethcontainer").append("<option> USD:" + (ETH.USD*num).toFixed(0) + "</option>");
+                    $("#ethcontainer").append("<option> EUR:" + (ETH.EUR*num).toFixed(0) + "</option>");
+                    $("#ethcontainer").append("<option> GBP:" + (ETH.GBP*num).toFixed(0) + "</option>");
+                }
+                if ($("#source").val() == "XRP") {
+
+                    if((XRP.USD*num).toFixed(0) <500 || (XRP.USD*num).toFixed(0) >500000){
+                        $("#alert").text("min value of transaction:500 USD and max value 500000 USD")
+                    }
+                    $("#xrpcontainer").append("<option> USD:" + (XRP.USD*num).toFixed(0) + "</option>");
+                    $("#xrpcontainer").append("<option> GBP:" + (XRP.GBP*num).toFixed(0) + "</option>");
+                    $("#xrpcontainer").append("<option> EUR:" + (XRP.EUR*num).toFixed(0) + "</option>");
+                }
+            }
+
+            function updateXRP(){}
+            function update(){}
+            function updateBTC(){}
+
+            function getCORS(url, success) {
+                var xhr = new XMLHttpRequest();
+                if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
+                xhr.open('GET', url);
+                xhr.onload = success;
+                xhr.send();
+                return xhr;
+            }
+
+            // example request
+            getCORS('https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,GBP,EUR&api_key=d23caf418fe6234401ce02163fe294f6e675dc0ac9cd5379c740268332a0969c', function (request) {
+                var response = request.currentTarget.response || request.target.responseText;
+                BTC = JSON.parse(response);
+
+                BTC.USD = ((1 +Margin)*BTC.USD).toFixed(0);
+                BTC.EUR =((1 +Margin)*BTC.EUR).toFixed(0);
+                BTC.GBP =((1 +Margin)*BTC.GBP).toFixed(0);debugger
+                $("#btccontainer").append("<option> USD:" + BTC.USD + "</option>");
+                $("#btccontainer").append("<option> EUR:" + BTC.EUR + "</option>");
+                $("#btccontainer").append("<option> GBP:" + BTC.GBP + "</option>");
+                console.log(response);
+            });
+            getCORS('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,GBP,EUR&api_key=d23caf418fe6234401ce02163fe294f6e675dc0ac9cd5379c740268332a0969c', function (request) {
+                var response = request.currentTarget.response || request.target.responseText;
+                ETH = JSON.parse(response);
+
+                ETH.USD = ((1 +Margin)*ETH.USD).toFixed(0);
+                ETH.EUR =((1 +Margin)*ETH.EUR).toFixed(0);
+                ETH.GBP =((1 +Margin)*ETH.GBP).toFixed(0);
+                $("#ethcontainer").append("<option> USD:" + ETH.USD + "</option>");
+                $("#ethcontainer").append("<option> EUR:" + ETH.EUR + "</option>");
+                $("#ethcontainer").append("<option> GBP:" + ETH.GBP + "</option>");
+                console.log(response);
+            });
+            getCORS('https://min-api.cryptocompare.com/data/price?fsym=XRP&tsyms=USD,GBP,EUR&api_key=d23caf418fe6234401ce02163fe294f6e675dc0ac9cd5379c740268332a0969c', function (request) {
+                var response = request.currentTarget.response || request.target.responseText;
+                XRP = JSON.parse(response);
+
+                XRP.USD = ((1 +Margin)*XRP.USD);
+                XRP.EUR =((1 +Margin)*XRP.EUR);
+                XRP.GBP =((1 +Margin)*XRP.GBP);
+                $("#xrpcontainer").append("<option> USD:" + XRP.USD + "</option>");
+                $("#xrpcontainer").append("<option> GBP:" + XRP.GBP + "</option>");
+                $("#xrpcontainer").append("<option> EUR:" + XRP.EUR + "</option>");
+                console.log(response);
+            });
+
+            $(document).ready(function(){
+                $("#ethcontainer").hide();
+
+                $("#xrpcontainer").hide();
+            });
+        </script>
+
+    </body>
+</html>
